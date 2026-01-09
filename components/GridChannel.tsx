@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ChannelData, AppId } from '../types';
 
 interface GridChannelProps {
@@ -14,9 +14,6 @@ const MASK_URI = `data:image/svg+xml,%3Csvg width='392' height='217' viewBox='0 
 const GridChannel: React.FC<GridChannelProps> = ({ channel, onClick, index }) => {
   const isEmpty = channel.id === AppId.EMPTY;
   const isMusic = channel.id === AppId.MUSIC;
-  
-  // Memoize random values so they don't change on re-renders
-  const floatDelay = useMemo(() => `${Math.random() * 2}s`, []);
 
   return (
     <div 
@@ -93,18 +90,15 @@ const GridChannel: React.FC<GridChannelProps> = ({ channel, onClick, index }) =>
                         {/* Background Pattern - subtle */}
                         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent" />
 
-                        {/* Floating Icon or Animated Element */}
-                        <div 
-                            className="relative transform transition-transform group-hover:scale-110 duration-300 animate-float"
-                            style={{ animationDelay: floatDelay }}
-                        >
+                        {/* Icon Container - No longer floats */}
+                        <div className="relative transform transition-transform group-hover:scale-110 duration-300">
                             {/* Scale icon slightly up to match "Banner" feel */}
                             <div className="scale-[1.5] md:scale-[2.2]">
                                 {isMusic ? (
                                     /* Rotating CD Animation */
                                     <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-tr from-gray-200 via-gray-100 to-gray-300 shadow-md border-[0.5px] border-gray-400/30 animate-[spin_4s_linear_infinite] overflow-hidden">
                                         {/* Iridescent / Shine Effect */}
-                                        <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(255,255,255,0.8),transparent,rgba(255,255,255,0.5),transparent)] opacity-60" />
+                                        <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(255,255,255,0.8),transparent,rgba(255,255,0.5),transparent)] opacity-60" />
                                         
                                         {/* Inner Ring (grooves) */}
                                         <div className="absolute inset-[10%] rounded-full border border-gray-400/10" />

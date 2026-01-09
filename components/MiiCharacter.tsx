@@ -12,9 +12,6 @@ const useTypingEffect = (text: string, speed = 40) => {
       let index = 0;
       const intervalId = setInterval(() => {
         if (index < text.length) {
-          // This is a more robust way to set the state.
-          // It computes the next state based on the original text and the current index,
-          // avoiding potential race conditions that can happen when relying on the 'previous' state.
           setDisplayedText(text.substring(0, index + 1));
           index += 1;
         } else {
@@ -22,7 +19,6 @@ const useTypingEffect = (text: string, speed = 40) => {
         }
       }, speed);
 
-      // Cleanup function to clear interval on unmount or if text changes
       return () => clearInterval(intervalId);
     }
   }, [text, speed]);
@@ -68,12 +64,15 @@ const videoSources = [
 
 const dialogueAndAnimations = [
     { dialogue: "Hope you're enjoying your visit :D ", videoIndex: 0 },
-    { dialogue: "Hallo!! Welcome to my website ^_^", videoIndex: 1 },
+    { dialogue: "Welcome to my website ^_^", videoIndex: 1 },
     { dialogue: "ALLAH!", videoIndex: 2 },
     { dialogue: "My life is nothing without art.", videoIndex: 3 },
-    { dialogue: "If you wanna work DM MEE! :D ", videoIndex: 4 },
+    { dialogue: "If you wanna work DM ME! >:D ", videoIndex: 4 },
     { dialogue: "Make sure u visit every channel!", videoIndex: 5 },
     { dialogue: "It's so cold in the UK bruh", videoIndex: 6 },
+    { dialogue: "Follow me on Instagram @kid.kareem!!", videoIndex: 4 },
+    { dialogue: "PREMIERE PRO KEEPS CRASHING ON ME BRUH", videoIndex: 2 },
+    { dialogue: "I wonder what imma make", videoIndex: 0 },
 ];
 
 const MiiCharacter: React.FC = () => {
@@ -166,7 +165,8 @@ const MiiCharacter: React.FC = () => {
         }
       `}</style>
       
-      <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-51%)', bottom: '-20vh', width: '70vh', height: '70vh', zIndex: 10001 }}>
+      {/* REMOVED zIndex: 10001 from this container */}
+      <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-51%)', bottom: '-20vh', width: '70vh', height: '70vh' }}>
         <div className="speech-bubble-container">
           {currentDialogue && <SpeechBubble key={currentDialogue.key} text={currentDialogue.text} onComplete={() => setCurrentDialogue(null)} />}
         </div>
