@@ -72,7 +72,7 @@ const dialogueAndAnimations = [
     { dialogue: "It's so cold in the UK bruh", videoIndex: 6 },
     { dialogue: "Follow me on Instagram @kid.kareem!!", videoIndex: 4 },
     { dialogue: "PREMIERE PRO KEEPS CRASHING ON ME BRUH", videoIndex: 2 },
-    { dialogue: "I wonder what imma make", videoIndex: 0 },
+    { dialogue: "Do you fw me? ", videoIndex: 0 },
 ];
 
 const MiiCharacter: React.FC = () => {
@@ -180,6 +180,9 @@ const MiiCharacter: React.FC = () => {
             muted
             playsInline
             onEnded={() => handleVideoEnded(0)}
+            onContextMenu={(e) => e.preventDefault()}
+            disablePictureInPicture
+            disableRemotePlayback
           />
           <video
             ref={videoRefs[1]}
@@ -188,6 +191,9 @@ const MiiCharacter: React.FC = () => {
             muted
             playsInline
             onEnded={() => handleVideoEnded(1)}
+            onContextMenu={(e) => e.preventDefault()}
+            disablePictureInPicture
+            disableRemotePlayback
           />
         </div>
       </div>
