@@ -85,14 +85,14 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick }) => {
           </div>
 
           {/* Center: Date & Time */}
-          <div className="flex-1 flex flex-col items-center justify-center pointer-events-none select-none pt-10 md:pt-[6vh]">
+          <div className="flex-1 flex flex-col items-center justify-center pointer-events-none select-none pt-12 md:pt-[6vh]">
             <div className="flex items-baseline text-[#8a8a8a] leading-none">
-                <span className="text-3xl md:text-[4.5vh] font-medium tracking-widest drop-shadow-sm font-['M_PLUS_Rounded_1c']">
+                <span className="text-3xl md:text-[4.5vh] font-medium tracking-widest drop-shadow-sm font-['Orbitron']">
                     {hours}<span className="animate-pulse opacity-50 mx-[1px]">:</span>{strMinutes}
                 </span>
                 <span className="text-sm md:text-[2vh] font-bold ml-1.5 uppercase tracking-wider">{ampm}</span>
             </div>
-            <div className="text-lg md:text-[2.5vh] font-medium text-[#9a9a9a] tracking-wide mt-1 md:mt-2">
+            <div className="text-lg md:text-[2.5vh] font-medium text-[#9a9a9a] tracking-wide mt-0 md:mt-2">
                 {formatDate(time)}
             </div>
           </div>

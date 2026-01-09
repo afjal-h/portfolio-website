@@ -268,7 +268,7 @@ const App: React.FC = () => {
               <div className="relative z-20 w-full h-full flex flex-col items-center pt-24 md:pt-[12vh] pb-32 overflow-y-auto no-scrollbar">
                 <div className="flex flex-wrap justify-center gap-4 md:gap-[4vh] w-full max-w-7xl px-4">
                   {CHANNELS.map((channel, index) => (
-                    <div key={channel.id} className="w-full sm:w-[45%] md:w-[30%] lg:w-[25%] max-w-[320px] animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
+                    <div key={channel.id} className="w-[45%] md:w-[30%] lg:w-[25%] max-w-[320px] animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
                       <GridChannel channel={channel} onClick={handleChannelClick} index={index} />
                     </div>
                   ))}
