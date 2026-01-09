@@ -236,14 +236,12 @@ const App: React.FC = () => {
               className={`
                     absolute inset-0 z-[200] bg-black text-white flex flex-col items-center justify-center p-8 text-center cursor-pointer 
                     transition-opacity duration-[1500ms] ease-in-out
-                    ${bootPhase === 'FADING_OVERLAY' ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-                `}
+                    ${bootPhase === 'FADING_OVERLAY' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             >
               <div className={`
                     max-w-2xl space-y-8 
                     transition-opacity duration-1000 ease-in-out
-                    ${(bootPhase === 'NOTICE') ? 'opacity-100' : 'opacity-0'}
-                `}>
+                    ${(bootPhase === 'NOTICE') ? 'opacity-100' : 'opacity-0'}`}>
                 <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white italic uppercase tracking-widest">Notice</h1>
                 <div className="h-1 w-24 bg-white mx-auto rounded-full"></div>
                 <p className="text-lg md:text-2xl font-light leading-relaxed text-gray-300">
@@ -275,7 +273,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="absolute bottom-[13%] md:bottom-[15%] left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+              <div className="absolute bottom-[13%] md:bottom-[15%] left-1/2 -translate-x-1/2 z-50">
                 <MiiCharacter />
               </div>
               <BottomBar onWiiClick={handleBackToGrid} onMailClick={handleOpenMail} />

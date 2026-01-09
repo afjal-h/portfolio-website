@@ -2,7 +2,7 @@ import React from 'react';
 
 const CRTOverlay: React.FC = () => {
   return (
-    <div className="absolute inset-0 pointer-events-none z-[10000]">
+    <div className="absolute inset-0 pointer-events-none z-[100]">
       {/* Combined Vignette & Reflection */}
       <div
         className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.5)] bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent"
