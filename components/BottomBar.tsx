@@ -113,7 +113,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick }) => {
             </div>
           </div>
 
-          {/* Right: Mail / Messages */}
+          {/* Right: Mail / Messages woo */}
           <div className="flex-1 flex justify-end items-center gap-4 md:gap-8">
             <Wifi className="hidden sm:block w-6 h-6 md:w-[4vh] md:h-[4vh] text-gray-400/80 animate-pulse" />
             
