@@ -137,7 +137,7 @@ const MiiCharacter: React.FC = () => {
     <>
       <style>{`
         .mii-video {
-          cursor: pointer !important;
+          cursor: none !important;
           position: absolute; top: 0; left: 0; width: 100%; height: 100%;
           opacity: 0;
           transition: opacity 60ms ease-in-out; /* Reduced from 80ms */
@@ -182,7 +182,7 @@ const MiiCharacter: React.FC = () => {
           {currentDialogue && <SpeechBubble key={currentDialogue.key} text={currentDialogue.text} onComplete={() => setCurrentDialogue(null)} />}
         </div>
 
-        <div className="relative w-full h-full object-contain drop-shadow-2xl transform scale-110 pointer-events-auto" onClick={handleVideoClick} style={{ willChange: 'transform', contain: 'content' }}>
+        <div className="relative w-full h-full object-contain drop-shadow-2xl transform scale-110 pointer-events-auto" onClick={handleVideoClick} style={{ willChange: 'transform', contain: 'content', cursor: 'none !important' }}>
           <video
             ref={videoRefs[0]}
             className={`mii-video ${activePlayerIndex === 0 ? 'active' : ''}`}
@@ -194,6 +194,7 @@ const MiiCharacter: React.FC = () => {
             onContextMenu={(e) => e.preventDefault()}
             disablePictureInPicture
             disableRemotePlayback
+            style={{ cursor: 'none !important' }}
           />
           <video
             ref={videoRefs[1]}
@@ -205,6 +206,7 @@ const MiiCharacter: React.FC = () => {
             onContextMenu={(e) => e.preventDefault()}
             disablePictureInPicture
             disableRemotePlayback
+            style={{ cursor: 'none !important' }}
           />
         </div>
       </div>
