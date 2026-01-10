@@ -342,7 +342,7 @@ const App: React.FC = () => {
               <div className="absolute bottom-[13%] md:bottom-[15%] left-1/2 -translate-x-1/2 z-20">
                 <MiiCharacter />
               </div>
-              {view === 'GRID' && !isTransitioning && <BottomBar onWiiClick={handleWiiButtonClick} onMailClick={handleOpenMail} />}
+              {view === 'GRID' && <BottomBar onWiiClick={handleWiiButtonClick} onMailClick={handleOpenMail} audioRef={audioRef} />}
             </div>
 
             {(isTransitioning || isOpen) && activeChannel && (

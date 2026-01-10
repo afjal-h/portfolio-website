@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Wifi } from 'lucide-react';
+import { Mail, Volume2, VolumeX } from 'lucide-react';
 
 interface BottomBarProps {
   onWiiClick: () => void;
   onMailClick: () => void;
+  audioRef?: React.RefObject<HTMLAudioElement>;
 }
 
-const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick }) => {
+const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick, audioRef }) => {
   const [time, setTime] = useState(new Date());
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -33,6 +35,12 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick }) => {
   };
 
   const { hours, strMinutes, ampm } = formatTimeParts(time);
+
+  const handleMuteToggle = () => {
+    if (!audioRef?.current) return;
+    audioRef.current.muted = !audioRef.current.muted;
+    setIsMuted(!isMuted);
+  };
 
   return (
     <div className="absolute bottom-0 left-0 right-0 h-[12%] md:h-[15%] min-h-[90px] flex justify-center z-50 pointer-events-none">
@@ -113,9 +121,18 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick }) => {
             </div>
           </div>
 
-          {/* Right: Mail / Messages woo */}
+          {/* Right: Speaker / Mail */}
           <div className="flex-1 flex justify-end items-center gap-4 md:gap-8">
-            <Wifi className="hidden sm:block w-6 h-6 md:w-[4vh] md:h-[4vh] text-gray-400/80 animate-pulse" />
+            <button
+              onClick={handleMuteToggle}
+              className="group relative p-2 hover:scale-110 transition-transform active:scale-95"
+            >
+              {isMuted ? (
+                <VolumeX className="w-6 h-6 md:w-[4vh] md:h-[4vh] text-gray-400/80 group-hover:text-blue-500 transition-colors" />
+              ) : (
+                <Volume2 className="w-6 h-6 md:w-[4vh] md:h-[4vh] text-gray-400/80 animate-pulse group-hover:text-blue-500 transition-colors" />
+              )}
+            </button>
 
             <button
               onClick={onMailClick}
