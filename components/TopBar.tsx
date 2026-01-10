@@ -2,7 +2,16 @@ import React from 'react';
 
 const TopBar: React.FC = () => {
     return (
-        <div className="absolute top-0 left-0 right-0 h-[9%] md:h-[11%] min-h-[60px] flex justify-center z-50 pointer-events-none">
+        <div className="absolute top-0 left-0 right-0 h-[9%] md:h-[11%] min-h-[60px] flex justify-center z-50 pointer-events-none animate-fadeIn" style={{ width: '100%' }}>
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 0.3s ease-in-out forwards;
+                }
+            `}</style>
             {/* Container for the Bar Content & Background */}
             <div className="relative w-full h-full pointer-events-auto">
                 {/* SVG Background Shape (straight, stroke only at bottom) */}

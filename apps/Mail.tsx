@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, ArrowLeft, Check, Mail } from 'lucide-react';
 import WiiButton from '../components/WiiButton';
+import { audioManager } from '../utils/audioManager';
 
 interface MailAppProps {
     onClose: () => void;
@@ -40,11 +41,7 @@ const MailApp: React.FC<MailAppProps> = ({ onClose, visible }) => {
     };
 
     const handleClose = () => {
-        // Play back sound effect
-        const backSound = new Audio('/audioo/back.mp3');
-        backSound.volume = 0.7;
-        backSound.play().catch(() => { });
-
+        audioManager.play('back');
         onClose();
     };
 

@@ -2,16 +2,17 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 // --- Helper Hook for the Typing Effect ---
-const useTypingEffect = (text: string, speed = 40) => {
+const useTypingEffect = (text: string, speed = 60) => {
   const [displayedText, setDisplayedText] = useState('');
 
   useEffect(() => {
     setDisplayedText(''); // Always reset when text changes
-    
+
     if (text) {
       let index = 0;
       const intervalId = setInterval(() => {
         if (index < text.length) {
+          // Use functional update to batch state changes
           setDisplayedText(text.substring(0, index + 1));
           index += 1;
         } else {
@@ -53,26 +54,26 @@ const SpeechBubble = ({ text, onComplete }: { text: string; onComplete: () => vo
 
 // --- Main Mii Character Component ---
 const videoSources = [
-  '/mii loop/thinking.webm',         // 0
-  '/mii loop/wave.webm',             // 1
-  '/mii loop/HANDS UP PRAYING.webm', // 2
-  '/mii loop/arms moving eyes shut.webm',// 3
-  '/mii loop/head swaying side to side.webm', // 4
-  '/mii loop/point wink.webm',       // 5
-  '/mii loop/why so down.webm',      // 6
+  '/mii%20loop/thinking.webm',         // 0
+  '/mii%20loop/wave.webm',             // 1
+  '/mii%20loop/HANDS%20UP%20PRAYING.webm', // 2
+  '/mii%20loop/arms%20moving%20eyes%20shut.webm',// 3
+  '/mii%20loop/head%20swaying%20side%20to%20side.webm', // 4
+  '/mii%20loop/point%20wink.webm',       // 5
+  '/mii%20loop/why%20so%20down.webm',      // 6
 ];
 
 const dialogueAndAnimations = [
-    { dialogue: "Hope you're enjoying your visit :D ", videoIndex: 0 },
-    { dialogue: "Welcome to my website ^_^", videoIndex: 1 },
-    { dialogue: "ALLAH!", videoIndex: 2 },
-    { dialogue: "My life is nothing without art.", videoIndex: 3 },
-    { dialogue: "If you wanna work DM ME! >:D ", videoIndex: 4 },
-    { dialogue: "Make sure u visit every channel!", videoIndex: 5 },
-    { dialogue: "It's so cold in the UK bruh", videoIndex: 6 },
-    { dialogue: "Follow me on Instagram @kid.kareem!!", videoIndex: 4 },
-    { dialogue: "PREMIERE PRO KEEPS CRASHING ON ME BRUH", videoIndex: 2 },
-    { dialogue: "Do you fw me? ", videoIndex: 0 },
+  { dialogue: "Hope you're enjoying your visit :D ", videoIndex: 0 },
+  { dialogue: "Welcome to my website ^_^", videoIndex: 1 },
+  { dialogue: "ALLAH!", videoIndex: 2 },
+  { dialogue: "My life is nothing without art.", videoIndex: 3 },
+  { dialogue: "If you wanna work DM ME! >:D ", videoIndex: 4 },
+  { dialogue: "Make sure u visit every channel!", videoIndex: 5 },
+  { dialogue: "It's so cold in the UK bruh", videoIndex: 6 },
+  { dialogue: "Follow me on Instagram @kid.kareem!!", videoIndex: 4 },
+  { dialogue: "PREMIERE PRO KEEPS CRASHING ON ME BRUH", videoIndex: 2 },
+  { dialogue: "Do you fw me? ", videoIndex: 0 },
 ];
 
 const MiiCharacter: React.FC = () => {
@@ -81,7 +82,8 @@ const MiiCharacter: React.FC = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(1); // Start with "wave.webm"
   const [currentDialogue, setCurrentDialogue] = useState<{ key: number; text: string } | null>(null);
 
-  const handleVideoClick = () => {
+  const handleVideoClick = useCallback(() => {
+    // Batch state updates to reduce re-renders
     let randomIndex;
     do {
       randomIndex = Math.floor(Math.random() * dialogueAndAnimations.length);
@@ -89,22 +91,26 @@ const MiiCharacter: React.FC = () => {
 
     const { dialogue, videoIndex: newVideoIndex } = dialogueAndAnimations[randomIndex];
 
-    setCurrentDialogue({ key: Date.now(), text: dialogue });
-
     const inactivePlayerIndex = 1 - activePlayerIndex;
     const inactiveVideoEl = videoRefs[inactivePlayerIndex].current;
     const activeVideoEl = videoRefs[activePlayerIndex].current;
 
     if (!inactiveVideoEl || !activeVideoEl) return;
 
+    // Update dialogue immediately (off main thread)
+    requestAnimationFrame(() => {
+      setCurrentDialogue({ key: Date.now(), text: dialogue });
+    });
+
     const performSwap = () => {
       inactiveVideoEl.play().catch(console.error);
-      setActivePlayerIndex(inactivePlayerIndex); // Trigger the cross-fade
+      // Batch state updates together
+      setActivePlayerIndex(inactivePlayerIndex);
       setCurrentVideoIndex(newVideoIndex);
-      
+
       setTimeout(() => {
         activeVideoEl.pause();
-      }, 100); 
+      }, 100);
 
       inactiveVideoEl.removeEventListener('canplaythrough', performSwap);
     };
@@ -117,7 +123,7 @@ const MiiCharacter: React.FC = () => {
     } else {
       inactiveVideoEl.addEventListener('canplaythrough', performSwap);
     }
-  };
+  }, [activePlayerIndex, currentVideoIndex]);
 
   const handleVideoEnded = useCallback((playerIndex: number) => {
     const videoEl = videoRefs[playerIndex].current;
@@ -134,7 +140,9 @@ const MiiCharacter: React.FC = () => {
           cursor: pointer !important;
           position: absolute; top: 0; left: 0; width: 100%; height: 100%;
           opacity: 0;
-          transition: opacity 80ms ease-in-out; /* The cross-fade */
+          transition: opacity 60ms ease-in-out; /* Reduced from 80ms */
+          will-change: opacity;
+          contain: layout style paint;
         }
         .mii-video.active {
           opacity: 1;
@@ -144,6 +152,8 @@ const MiiCharacter: React.FC = () => {
           transform: translateX(-50%);
           width: 90%; max-width: 320px; z-index: 10;
           pointer-events: none;
+          will-change: contents;
+          contain: content;
         }
         .speech-bubble {
           position: relative; background: #f8f9fa;
@@ -154,7 +164,8 @@ const MiiCharacter: React.FC = () => {
           box-shadow: 0 5px 15px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.08);
           border: 1px solid #dee2e6; opacity: 0;
           transform: translateY(15px) scale(0.95);
-          transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          will-change: opacity, transform;
         }
         .speech-bubble.visible { opacity: 1; transform: translateY(0) scale(1); }
         .speech-bubble::after {
@@ -164,14 +175,14 @@ const MiiCharacter: React.FC = () => {
           transform: translateX(-50%) translateY(99%);
         }
       `}</style>
-      
+
       {/* REMOVED zIndex: 10001 from this container */}
-      <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-51%)', bottom: '-20vh', width: '70vh', height: '70vh' }}>
+      <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-51%)', bottom: '-20vh', width: '70vh', height: '70vh', contain: 'layout style paint' }}>
         <div className="speech-bubble-container">
           {currentDialogue && <SpeechBubble key={currentDialogue.key} text={currentDialogue.text} onComplete={() => setCurrentDialogue(null)} />}
         </div>
 
-        <div className="relative w-full h-full object-contain drop-shadow-2xl transform scale-110 pointer-events-auto" onClick={handleVideoClick}>
+        <div className="relative w-full h-full object-contain drop-shadow-2xl transform scale-110 pointer-events-auto" onClick={handleVideoClick} style={{ willChange: 'transform', contain: 'content' }}>
           <video
             ref={videoRefs[0]}
             className={`mii-video ${activePlayerIndex === 0 ? 'active' : ''}`}

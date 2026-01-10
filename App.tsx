@@ -14,6 +14,7 @@ import MailApp from './apps/Mail';
 import MiiCharacter from './components/MiiCharacter';
 import CRTOverlay from './components/CRTOverlay';
 import { ArrowLeft } from 'lucide-react';
+import { audioManager } from './utils/audioManager';
 
 const CHANNEL_PATH = "M196 3.5C263.661 3.5 319.468 3.49908 358.541 5.64062L362.27 5.85449L362.278 5.85547C367.854 6.21006 373.127 8.51403 377.176 12.3643C381.218 16.209 383.783 21.3508 384.421 26.8926C387.028 47.9647 388.5 82.1481 388.5 108.5C388.5 134.842 387.029 169.009 384.423 190.083L384.424 190.084C383.79 195.635 381.224 200.786 377.176 204.636C373.127 208.486 367.854 210.79 362.278 211.145L362.27 211.146C323.056 213.501 265.844 213.5 196 213.5C126.156 213.5 68.9442 213.501 29.7305 211.146L29.7217 211.145C24.146 210.79 18.8726 208.486 14.8242 204.636C10.7759 200.786 8.20994 195.635 7.57617 190.084V190.083C4.97044 169.009 3.5 134.882 3.5 108.5C3.5 82.108 4.97152 47.9647 7.5791 26.8926C8.21742 21.3508 10.7816 16.209 14.8242 12.3643C18.8726 8.51402 24.146 6.21006 29.7217 5.85547L29.7305 5.85449L33.459 5.64062C72.5319 3.49908 128.339 3.5 196 3.5Z";
 const MASK_URI = `data:image/svg+xml,%3Csvg width='392' height='217' viewBox='0 0 392 217' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='${CHANNEL_PATH}' fill='black'/%3E%3C/svg%3E`;
@@ -103,9 +104,7 @@ const App: React.FC = () => {
     calculateAndSetGeometry(rect);
 
     // Play channel zoom in sound effect
-    const zoomSound = new Audio('/audioo/channel zoom in.mp3');
-    zoomSound.volume = 0.7;
-    zoomSound.play().catch(() => { });
+    audioManager.play('channelZoomIn');
 
     setActiveChannel(channel);
     setAnimState('MEASURING');
@@ -121,6 +120,8 @@ const App: React.FC = () => {
     const currentIndex = CHANNELS.findIndex(c => c.id === activeChannel.id);
     if (currentIndex === -1) return;
 
+    audioManager.play('nextChannel');
+
     const newIndex = direction === 'next' ? (currentIndex + 1) % CHANNELS.length : (currentIndex - 1 + CHANNELS.length) % CHANNELS.length;
     const nextChannel = CHANNELS[newIndex];
 
@@ -134,11 +135,12 @@ const App: React.FC = () => {
     setActiveChannel(nextChannel);
   };
 
+  const handleWiiButtonClick = () => {
+    audioManager.play('kareemButton');
+  };
+
   const handleBackToGrid = () => {
-    // Play channel zoom out sound effect
-    const zoomOutSound = new Audio('/audioo/channel zoom out.mp3');
-    zoomOutSound.volume = 0.7;
-    zoomOutSound.play().catch(() => { });
+    audioManager.play('channelZoomOut');
 
     if (geometryLayout || geometryTransform) {
       setAnimState('EXPANDING');
@@ -159,6 +161,7 @@ const App: React.FC = () => {
   };
 
   const handleStartApp = () => {
+    audioManager.play('start');
     setBlackout(true);
     setTimeout(() => {
       setView('APP');
@@ -167,6 +170,7 @@ const App: React.FC = () => {
   };
 
   const handleOpenMail = () => {
+    audioManager.play('mail');
     setIsMailOpen(true);
     requestAnimationFrame(() => requestAnimationFrame(() => setIsMailVisible(true)));
   };
@@ -303,7 +307,6 @@ const App: React.FC = () => {
 
   return (
     <>
-      {view === 'GRID' && !isTransitioning && <TopBar />}
       <Cursor />
       <div id="crt-warp-container">
         <div className="hidden lg:block">
@@ -311,6 +314,7 @@ const App: React.FC = () => {
         </div>
         <div className={`fixed inset-0 bg-black z-[10001] pointer-events-none transition-opacity duration-500 ${blackout ? 'opacity-100' : 'opacity-0'}`} />
         <div className="relative w-full h-full text-gray-800 flex flex-col overflow-hidden">
+          {view === 'GRID' && !isTransitioning && <TopBar />}
           {bootPhase !== 'COMPLETE' && (
             <div onMouseDown={handleDisclaimerClick} className={`absolute inset-0 z-[200] bg-black text-white flex flex-col items-center justify-center p-8 text-center cursor-pointer transition-opacity duration-[1500ms] ease-in-out ${bootPhase === 'FADING_OVERLAY' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <div className={`max-w-2xl space-y-8 transition-opacity duration-1000 ease-in-out ${(bootPhase === 'NOTICE') ? 'opacity-100' : 'opacity-0'}`}>
@@ -338,7 +342,7 @@ const App: React.FC = () => {
               <div className="absolute bottom-[13%] md:bottom-[15%] left-1/2 -translate-x-1/2 z-20">
                 <MiiCharacter />
               </div>
-              {view === 'GRID' && !isTransitioning && <BottomBar onWiiClick={handleBackToGrid} onMailClick={handleOpenMail} />}
+              {view === 'GRID' && !isTransitioning && <BottomBar onWiiClick={handleWiiButtonClick} onMailClick={handleOpenMail} />}
             </div>
 
             {(isTransitioning || isOpen) && activeChannel && (
