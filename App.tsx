@@ -314,7 +314,7 @@ const App: React.FC = () => {
         </div>
         <div className={`fixed inset-0 bg-black z-[10001] pointer-events-none transition-opacity duration-500 ${blackout ? 'opacity-100' : 'opacity-0'}`} />
         <div className="relative w-full h-full text-gray-800 flex flex-col overflow-hidden">
-          {view === 'GRID' && !isTransitioning && <TopBar />}
+          {view === 'GRID' && <TopBar isTransitioning={isTransitioning} />}
           {bootPhase !== 'COMPLETE' && (
             <div onMouseDown={handleDisclaimerClick} className={`absolute inset-0 z-[200] bg-black text-white flex flex-col items-center justify-center p-8 text-center cursor-pointer transition-opacity duration-[1500ms] ease-in-out ${bootPhase === 'FADING_OVERLAY' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <div className={`max-w-2xl space-y-8 transition-opacity duration-1000 ease-in-out ${(bootPhase === 'NOTICE') ? 'opacity-100' : 'opacity-0'}`}>
@@ -326,7 +326,7 @@ const App: React.FC = () => {
             </div>
           )}
           <div className="relative flex-1 w-full overflow-hidden">
-            <div className="absolute inset-0 bg-black z-30 pointer-events-none transition-opacity duration-300" style={{ opacity: (view === 'START_SCREEN' || isTransitioning) ? 1 : 0 }} />
+            <div className="absolute inset-0 bg-black z-40 pointer-events-none transition-opacity duration-300" style={{ opacity: (view === 'START_SCREEN' || isTransitioning) ? 1 : 0 }} />
             <div className={`relative w-full h-full transition-opacity duration-300 ${view === 'GRID' && !isTransitioning ? 'opacity-100' : 'opacity-0'}`}>
               {/* Animated Pulsating Grid */}
               {view === 'GRID' && !isTransitioning && <PulsatingGrid />}
@@ -342,7 +342,7 @@ const App: React.FC = () => {
               <div className="absolute bottom-[13%] md:bottom-[15%] left-1/2 -translate-x-1/2 z-20">
                 <MiiCharacter />
               </div>
-              {view === 'GRID' && !isTransitioning && <BottomBar onWiiClick={handleWiiButtonClick} onMailClick={handleOpenMail} />}
+              {view === 'GRID' && <BottomBar onWiiClick={handleWiiButtonClick} onMailClick={handleOpenMail} isTransitioning={isTransitioning} />}
             </div>
 
             {(isTransitioning || isOpen) && activeChannel && (

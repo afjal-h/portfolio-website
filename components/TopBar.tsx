@@ -1,17 +1,12 @@
 import React from 'react';
 
-const TopBar: React.FC = () => {
+interface TopBarProps {
+    isTransitioning?: boolean;
+}
+
+const TopBar: React.FC<TopBarProps> = ({ isTransitioning = false }) => {
     return (
-        <div className="absolute top-0 left-0 right-0 h-[9%] md:h-[11%] min-h-[60px] flex justify-center z-50 pointer-events-none animate-fadeIn" style={{ width: '100%' }}>
-            <style>{`
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                .animate-fadeIn {
-                    animation: fadeIn 0.3s ease-in-out forwards;
-                }
-            `}</style>
+        <div className="absolute top-0 left-0 right-0 h-[9%] md:h-[11%] min-h-[60px] flex justify-center z-50 pointer-events-none transition-opacity duration-300" style={{ width: '100%', opacity: isTransitioning ? 0 : 1, pointerEvents: isTransitioning ? 'none' : 'auto' }}>
             {/* Container for the Bar Content & Background */}
             <div className="relative w-full h-full pointer-events-auto">
                 {/* SVG Background Shape (straight, stroke only at bottom) */}

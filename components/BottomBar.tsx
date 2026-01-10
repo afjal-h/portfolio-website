@@ -4,9 +4,10 @@ import { Mail, Wifi } from 'lucide-react';
 interface BottomBarProps {
   onWiiClick: () => void;
   onMailClick: () => void;
+  isTransitioning?: boolean;
 }
 
-const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick }) => {
+const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick, isTransitioning = false }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick }) => {
   const { hours, strMinutes, ampm } = formatTimeParts(time);
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 h-[12%] md:h-[15%] min-h-[90px] flex justify-center z-50 pointer-events-none">
+    <div className="absolute bottom-0 left-0 right-0 h-[12%] md:h-[15%] min-h-[90px] flex justify-center z-50 pointer-events-none transition-opacity duration-300" style={{ opacity: isTransitioning ? 0 : 1, pointerEvents: isTransitioning ? 'none' : 'auto' }}>
 
       {/* Container for the Bar Content & Background */}
       <div className="relative w-full h-full pointer-events-auto">
