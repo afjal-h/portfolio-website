@@ -74,8 +74,12 @@ const StartScreen: React.FC<StartScreenProps> = ({
                         autoPlay
                         muted
                         loop
+                        playsInline
+                        controlsList="nodownload nofullscreen"
+                        disablePictureInPicture
                         className="absolute inset-0 w-full h-full object-cover z-10"
                         style={{ filter: 'brightness(0.9)' }}
+                        onContextMenu={(e) => e.preventDefault()}
                     >
                         <source src={channel.previewVideo} type="video/mp4" />
                     </video>

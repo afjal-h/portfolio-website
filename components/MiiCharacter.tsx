@@ -153,7 +153,7 @@ const MiiCharacter: React.FC = () => {
           width: 90%; max-width: 320px; z-index: 10;
           pointer-events: none;
           will-change: contents;
-          contain: content;
+          overflow: visible;
         }
         .speech-bubble {
           position: relative; background: #f8f9fa;
@@ -166,13 +166,36 @@ const MiiCharacter: React.FC = () => {
           transform: translateY(15px) scale(0.95);
           transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           will-change: opacity, transform;
+          overflow: visible;
         }
         .speech-bubble.visible { opacity: 1; transform: translateY(0) scale(1); }
+        .speech-bubble::before {
+          content: '';
+          position: absolute;
+          bottom: -13px;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-left: 13px solid transparent;
+          border-right: 13px solid transparent;
+          border-top: 13px solid #dee2e6;
+          transform: translateX(-50%);
+          pointer-events: none;
+          z-index: -1;
+        }
         .speech-bubble::after {
-          content: ''; position: absolute; bottom: 0; left: 50%;
-          width: 0; height: 0; border: 18px solid transparent;
-          border-top-color: #f8f9fa; border-bottom: 0;
-          transform: translateX(-50%) translateY(99%);
+          content: '';
+          position: absolute;
+          bottom: -12px;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-left: 12px solid transparent;
+          border-right: 12px solid transparent;
+          border-top: 12px solid #f8f9fa;
+          transform: translateX(-50%);
+          pointer-events: none;
+        }
         }
       `}</style>
 
