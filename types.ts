@@ -16,6 +16,7 @@ export interface ChannelData {
   icon: React.ReactNode;
   color: string;
   bannerImage?: string; // URL for the start screen banner
+  previewVideo?: string; // URL for channel preview video
   description?: string;
 }
 

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import PulsatingGrid from './components/PulsatingGrid';
 import { AppId, ChannelData, ViewState } from './types';
 import { CHANNELS } from './constants';
 import Cursor from './components/Cursor';
 import GridChannel from './components/GridChannel';
 import StartScreen from './components/StartScreen';
+import TopBar from './components/TopBar';
 import BottomBar from './components/BottomBar';
 import AboutApp from './apps/About';
 import VideoApp from './apps/Videos';
@@ -31,6 +33,10 @@ const App: React.FC = () => {
   // Separate geometry state for each animation type
   const [geometryLayout, setGeometryLayout] = useState<{ start: any; end: any } | null>(null);
   const [geometryTransform, setGeometryTransform] = useState<{ dest: any; initialTransform: any } | null>(null);
+
+  // Background music state and ref
+  const [musicStarted, setMusicStarted] = useState(false);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
@@ -96,6 +102,11 @@ const App: React.FC = () => {
     const rect = e.currentTarget.getBoundingClientRect();
     calculateAndSetGeometry(rect);
 
+    // Play channel zoom in sound effect
+    const zoomSound = new Audio('/audioo/channel zoom in.mp3');
+    zoomSound.volume = 0.7;
+    zoomSound.play().catch(() => { });
+
     setActiveChannel(channel);
     setAnimState('MEASURING');
     setTimeout(() => {
@@ -124,6 +135,11 @@ const App: React.FC = () => {
   };
 
   const handleBackToGrid = () => {
+    // Play channel zoom out sound effect
+    const zoomOutSound = new Audio('/audioo/channel zoom out.mp3');
+    zoomOutSound.volume = 0.7;
+    zoomOutSound.play().catch(() => { });
+
     if (geometryLayout || geometryTransform) {
       setAnimState('EXPANDING');
       setTimeout(() => {
@@ -193,20 +209,20 @@ const App: React.FC = () => {
     if (!geometryTransform) return null;
     const isShrunk = animState === 'MEASURING' || (animState === 'IDLE' && view === 'GRID');
     return (
-        <div
-            className="absolute z-40 flex flex-col"
-            style={{
-                top: geometryTransform.dest.top, left: geometryTransform.dest.left, width: geometryTransform.dest.width, height: geometryTransform.dest.height,
-                transform: isShrunk
-                    ? `translate(${geometryTransform.initialTransform.translateX}px, ${geometryTransform.initialTransform.translateY}px) scale(${geometryTransform.initialTransform.scaleX}, ${geometryTransform.initialTransform.scaleY})`
-                    : 'translate(0, 0) scale(1)',
-                transition: isTransitioning ? 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none',
-                pointerEvents: isTransitioning ? 'none' : 'auto',
-                willChange: 'transform',
-                transformOrigin: 'center center'
-            }}>
-            {renderChannelContent()}
-        </div>
+      <div
+        className="absolute z-40 flex flex-col"
+        style={{
+          top: geometryTransform.dest.top, left: geometryTransform.dest.left, width: geometryTransform.dest.width, height: geometryTransform.dest.height,
+          transform: isShrunk
+            ? `translate(${geometryTransform.initialTransform.translateX}px, ${geometryTransform.initialTransform.translateY}px) scale(${geometryTransform.initialTransform.scaleX}, ${geometryTransform.initialTransform.scaleY})`
+            : 'translate(0, 0) scale(1)',
+          transition: isTransitioning ? 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none',
+          pointerEvents: isTransitioning ? 'none' : 'auto',
+          willChange: 'transform',
+          transformOrigin: 'center center'
+        }}>
+        {renderChannelContent()}
+      </div>
     );
   }
 
@@ -228,8 +244,66 @@ const App: React.FC = () => {
     </div>
   );
 
+  // Helper to fade in music
+  function fadeInMusic(targetVolume = 0.13, duration = 1200) {
+    if (!audioRef.current) return;
+    const audio = audioRef.current;
+    const start = audio.volume;
+    const steps = 24;
+    const stepTime = duration / steps;
+    let currentStep = 0;
+    function step() {
+      currentStep++;
+      audio.volume = start + (targetVolume - start) * (currentStep / steps);
+      if (currentStep < steps) {
+        setTimeout(step, stepTime);
+      } else {
+        audio.volume = targetVolume;
+      }
+    }
+    step();
+  }
+
+  // Start music after notice screen is dismissed
+  useEffect(() => {
+    if (bootPhase === 'COMPLETE' && !musicStarted) {
+      if (!audioRef.current) {
+        audioRef.current = new window.Audio('/audioo/bg.mp3');
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.13; // Lower volume for background
+      }
+      audioRef.current.play().catch(() => { });
+      setMusicStarted(true);
+    }
+    // Pause music if user returns to notice screen
+    if (bootPhase !== 'COMPLETE' && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setMusicStarted(false);
+    }
+  }, [bootPhase, musicStarted]);
+
+  // Pause music if leaving main menu
+  useEffect(() => {
+    if (audioRef.current) {
+      if (view !== 'GRID') {
+        audioRef.current.pause();
+      } else if (musicStarted && bootPhase === 'COMPLETE') {
+        audioRef.current.play().catch(() => { });
+      }
+    }
+  }, [view, musicStarted, bootPhase]);
+
+  // Fade in music when returning to GRID from START_SCREEN
+  useEffect(() => {
+    if (view === 'GRID' && musicStarted && bootPhase === 'COMPLETE') {
+      fadeInMusic(0.13, 1200);
+    }
+  }, [view, musicStarted, bootPhase]);
+
   return (
     <>
+      {view === 'GRID' && !isTransitioning && <TopBar />}
       <Cursor />
       <div id="crt-warp-container">
         <div className="hidden lg:block">
@@ -250,7 +324,9 @@ const App: React.FC = () => {
           <div className="relative flex-1 w-full overflow-hidden">
             <div className="absolute inset-0 bg-black z-30 pointer-events-none transition-opacity duration-300" style={{ opacity: (view === 'START_SCREEN' || isTransitioning) ? 1 : 0 }} />
             <div className={`relative w-full h-full transition-opacity duration-300 ${view === 'GRID' && !isTransitioning ? 'opacity-100' : 'opacity-0'}`}>
-              <div className="relative z-20 w-full h-full flex flex-col items-center pt-24 md:pt-[12vh] pb-32 overflow-y-auto no-scrollbar">
+              {/* Animated Pulsating Grid */}
+              {view === 'GRID' && !isTransitioning && <PulsatingGrid />}
+              <div className="relative z-20 w-full h-full flex flex-col items-center pt-32 md:pt-[20vh] pb-32 overflow-y-auto no-scrollbar">
                 <div className="flex flex-wrap justify-center gap-4 md:gap-[4vh] w-full max-w-7xl px-4">
                   {CHANNELS.map((channel, index) => (
                     <div key={channel.id} id={`channel-card-${channel.id}`} className="w-[45%] md:w-[30%] lg:w-[25%] max-w-[320px] animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
@@ -262,7 +338,7 @@ const App: React.FC = () => {
               <div className="absolute bottom-[13%] md:bottom-[15%] left-1/2 -translate-x-1/2 z-20">
                 <MiiCharacter />
               </div>
-              <BottomBar onWiiClick={handleBackToGrid} onMailClick={handleOpenMail} />
+              {view === 'GRID' && !isTransitioning && <BottomBar onWiiClick={handleBackToGrid} onMailClick={handleOpenMail} />}
             </div>
 
             {(isTransitioning || isOpen) && activeChannel && (

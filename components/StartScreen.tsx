@@ -68,37 +68,53 @@ const StartScreen: React.FC<StartScreenProps> = ({
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black to-transparent" />
 
-                {/* Icon Container */}
-                <div
-                    className={`
-                    absolute transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-20
-                    ${isGrid ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-100' : 'top-[14%] left-1/2 -translate-x-1/2 translate-y-0 scale-100'}
-                `}
-                >
+                {/* Video Preview - if available */}
+                {channel.previewVideo && (
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        className="absolute inset-0 w-full h-full object-cover z-10"
+                        style={{ filter: 'brightness(0.9)' }}
+                    >
+                        <source src={channel.previewVideo} type="video/mp4" />
+                    </video>
+                )}
+
+                {/* Icon Container - hidden if video is playing */}
+                {!channel.previewVideo && (
                     <div
                         className={`
-                        transition-all duration-600 flex items-center justify-center
-                        ${isGrid ? 'bg-transparent p-0 shadow-none' : 'bg-white p-[2cqh] rounded-full shadow-lg'}
+                        absolute transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-20
+                        ${isGrid ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-100' : 'top-[14%] left-1/2 -translate-x-1/2 translate-y-0 scale-100'}
                     `}
                     >
-                        {/* 
-                       Force child SVGs to fit this container via CSS arbitrary variant [&>svg] 
-                       Icon size is roughly 16% of container height 
-                    */}
-                        <div className={`
-                        relative flex items-center justify-center 
-                        ${isGrid ? 'w-[30cqh] h-[30cqh]' : 'w-[16cqh] h-[16cqh]'}
-                        [&>svg]:!w-full [&>svg]:!h-full
-                    `}>
-                            {channel.icon}
+                        <div
+                            className={`
+                            transition-all duration-600 flex items-center justify-center
+                            ${isGrid ? 'bg-transparent p-0 shadow-none' : 'bg-white p-[2cqh] rounded-full shadow-lg'}
+                        `}
+                        >
+                            {/* 
+                           Force child SVGs to fit this container via CSS arbitrary variant [&>svg] 
+                           Icon size is roughly 16% of container height 
+                        */}
+                            <div className={`
+                            relative flex items-center justify-center 
+                            ${isGrid ? 'w-[30cqh] h-[30cqh]' : 'w-[16cqh] h-[16cqh]'}
+                            [&>svg]:!w-full [&>svg]:!h-full
+                        `}>
+                                {channel.icon}
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
                 {/* Text Content */}
                 <div
                     className={`
-                    z-10 text-center transition-opacity duration-500 delay-100 w-full max-w-[80cqw]
+                    z-10 text-center transition-opacity duration-500 w-full max-w-[80cqw]
+                    ${channel.previewVideo ? 'delay-1000' : 'delay-100'}
                     ${isGrid ? 'opacity-0 translate-y-10' : 'opacity-100 translate-y-0'}
                     mt-[22cqh] space-y-[2cqh]
                 `}

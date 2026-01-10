@@ -13,9 +13,10 @@ export const CHANNELS: ChannelData[] = [
   {
     id: AppId.VIDEO,
     title: "Video Portfolio",
-    icon: <Video className="w-8 h-8 md:w-12 md:h-12 text-red-500" />,
+    icon: <img src="/assets/yt banner.png" alt="Video Portfolio" className="w-full h-full object-cover" />,
     color: "bg-red-100",
-    description: "A showcase of my cinematography and editing work."
+    description: "A showcase of my cinematography and editing work.",
+    previewVideo: "/videos/accordion.mp4"
   },
   {
     id: AppId.MUSIC,
