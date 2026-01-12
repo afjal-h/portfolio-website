@@ -310,14 +310,8 @@ const App: React.FC = () => {
     <>
       <Cursor />
       <div id="crt-warp-container">
-        <div className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="hidden lg:block">
           <CRTOverlay />
-          <img
-            src="/bezel.svg"
-            className="absolute inset-0 w-full h-full z-[10002]"
-            style={{ objectFit: 'fill' }}
-            alt=""
-          />
         </div>
         <div className={`fixed inset-0 bg-black z-[10001] pointer-events-none transition-opacity duration-500 ${blackout ? 'opacity-100' : 'opacity-0'}`} />
         <div className="relative w-full h-full text-gray-800 flex flex-col overflow-hidden">
