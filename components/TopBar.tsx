@@ -30,7 +30,7 @@ const TopBar: React.FC = () => {
                 {/* Centered Pixelated Text */}
                 <div className="absolute inset-0 flex items-center justify-center z-10">
                     <span className="text-gray-800 text-lg md:text-2xl font-bold select-none" style={{ fontFamily: '"Press Start 2P", "VT323", "Consolas", "monospace"', letterSpacing: '0.04em' }}>
-
+                        HOME
                     </span>
                 </div>
             </div>

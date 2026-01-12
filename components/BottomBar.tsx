@@ -43,7 +43,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick, audioRef
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 h-[12%] md:h-[15%] min-h-[90px] flex justify-center z-50 pointer-events-none">
+    <div className="absolute bottom-0 left-0 right-0 h-[12%] sm:h-[13%] md:h-[15%] min-h-[80px] sm:min-h-[90px] flex justify-center z-50 pointer-events-none">
 
       {/* Container for the Bar Content & Background */}
       <div className="relative w-full h-full pointer-events-auto">
@@ -77,13 +77,13 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick, audioRef
         </div>
 
         {/* Content Layer */}
-        <div className="relative h-full flex items-center justify-between px-8 md:px-16 pb-2">
+        <div className="relative h-full flex items-center justify-between px-2 sm:px-4 md:px-8 lg:px-16 pb-1 sm:pb-2">
 
           {/* Left: Wii Button */}
           <div className="flex-1 flex justify-start items-center">
             <button
               onClick={onWiiClick}
-              className="group relative w-16 h-16 md:w-[7vh] md:h-[7vh] aspect-square rounded-full border-[4px] md:border-[5px] border-gray-300 bg-white shadow-lg flex items-center justify-center transition-all transform hover:scale-105 active:scale-95"
+              className="group relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[7vh] lg:h-[7vh] aspect-square rounded-full border-[3px] sm:border-[4px] md:border-[5px] border-gray-300 bg-white shadow-lg flex items-center justify-center transition-all transform hover:scale-105 active:scale-95"
             >
               <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent to-black/5 opacity-50" />
               <svg
@@ -109,46 +109,46 @@ const BottomBar: React.FC<BottomBarProps> = ({ onWiiClick, onMailClick, audioRef
           </div>
 
           {/* Center: Date & Time */}
-          <div className="flex-1 flex flex-col items-center justify-center pointer-events-none select-none pt-12 md:pt-[6vh]">
+          <div className="flex-1 flex flex-col items-center justify-center pointer-events-none select-none pt-9 sm:pt-8 md:pt-20 lg:pt-[6vh]">
             <div className="flex items-baseline text-[#8a8a8a] leading-none">
-              <span className="text-3xl md:text-[4.5vh] font-medium tracking-widest drop-shadow-sm font-['Orbitron']">
+              <span className="text-xl sm:text-2xl md:text-3xl lg:text-[4.5vh] font-medium tracking-widest drop-shadow-sm font-['Orbitron']">
                 {hours}<span className="animate-pulse opacity-50 mx-[1px]">:</span>{strMinutes}
               </span>
-              <span className="text-sm md:text-[2vh] font-bold ml-1.5 uppercase tracking-wider">{ampm}</span>
+              <span className="text-xs sm:text-sm md:text-base lg:text-[2vh] font-bold ml-1 md:ml-1.5 uppercase tracking-wider">{ampm}</span>
             </div>
-            <div className="text-lg md:text-[2.5vh] font-medium text-[#9a9a9a] tracking-wide mt-0 md:mt-2">
+            <div className="text-sm sm:text-base md:text-lg lg:text-[2.5vh] font-medium text-[#9a9a9a] tracking-wide mt-0 md:mt-2">
               {formatDate(time)}
             </div>
           </div>
 
           {/* Right: Speaker / Mail */}
-          <div className="flex-1 flex justify-end items-center gap-4 md:gap-8">
+          <div className="flex-1 flex justify-end items-center gap-2 sm:gap-3 md:gap-4 lg:gap-8">
             <button
               onClick={handleMuteToggle}
-              className="group relative p-2 hover:scale-110 transition-transform active:scale-95"
+              className="group relative p-1 sm:p-2 hover:scale-110 transition-transform active:scale-95"
             >
               {isMuted ? (
-                <VolumeX className="w-6 h-6 md:w-[4vh] md:h-[4vh] text-gray-400/80 group-hover:text-blue-500 transition-colors" />
+                <VolumeX className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-[4vh] lg:h-[4vh] text-gray-400/80 group-hover:text-blue-500 transition-colors" />
               ) : (
-                <Volume2 className="w-6 h-6 md:w-[4vh] md:h-[4vh] text-gray-400/80 animate-pulse group-hover:text-blue-500 transition-colors" />
+                <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-[4vh] lg:h-[4vh] text-gray-400/80 animate-pulse group-hover:text-blue-500 transition-colors" />
               )}
             </button>
 
             <button
               onClick={onMailClick}
-              className="group relative w-16 h-16 md:w-[7vh] md:h-[7vh] aspect-square rounded-full border-[4px] md:border-[5px] border-gray-300 bg-white shadow-lg flex items-center justify-center transition-all transform hover:scale-105 active:scale-95"
+              className="group relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[7vh] lg:h-[7vh] aspect-square rounded-full border-[3px] sm:border-[4px] md:border-[5px] border-gray-300 bg-white shadow-lg flex items-center justify-center transition-all transform hover:scale-105 active:scale-95"
             >
               {/* Inner Gradient */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent to-black/5 opacity-50" />
 
               {/* Mail Icon */}
-              <Mail className="w-8 h-8 md:w-[3.5vh] md:h-[3.5vh] text-gray-400 group-hover:text-blue-500 transition-colors z-10" />
+              <Mail className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[3.5vh] lg:h-[3.5vh] text-gray-400 group-hover:text-blue-500 transition-colors z-10" />
 
               {/* Hover Glow */}
               <div className="absolute inset-0 rounded-full border-4 border-blue-300 opacity-0 group-hover:opacity-100 animate-pulse" />
 
               {/* Notification Badge */}
-              <div className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full animate-bounce shadow-sm border border-white z-20" />
+              <div className="absolute top-0 right-0 w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full animate-bounce shadow-sm border border-white z-20" />
             </button>
           </div>
 

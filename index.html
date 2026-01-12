@@ -37,7 +37,7 @@
       justify-content: center;
     }
 
-    /* Base Container Styles - Mobile Optimized (No heavy filters) */
+    /* Base Container Styles - Mobile Optimized */
     #crt-warp-container {
       position: relative;
       width: 100vw;
@@ -49,19 +49,7 @@
       transform: none;
     }
 
-    /* Desktop Adjustments - Apply CRT Filter & Letterboxing Here */
-    @media (min-width: 1024px) {
-      #crt-warp-container {
-        width: min(100vw, 177.78vh);
-        height: min(100vh, 56.25vw);
-        aspect-ratio: 16 / 9;
-        box-shadow: 0 0 150px rgba(0, 0, 0, 0.8);
-        /* Only apply displacement filter on desktop to fix mobile lag */
-        filter: url(#crt);
-        transform: scale(1.05);
-        /* Hide edge artifacts */
-      }
-    }
+
 
     ::-webkit-scrollbar {
       width: 8px;
@@ -97,22 +85,112 @@
       will-change: transform;
     }
 
-    @keyframes crt-flicker {
+    /* CRT Scanlines Effect */
+    .crt-scanlines::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 2;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+
+
+    /* CRT Color Separation Effect */
+    .crt-colorsep {
+      animation: textShadow 1.6s infinite;
+    }
+
+    @keyframes textShadow {
       0% {
-        opacity: 0.98;
+        text-shadow: 0.4389924193300864px 0 1px rgba(0, 30, 255, 0.5), -0.4389924193300864px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      5% {
+        text-shadow: 2.7928974010788217px 0 1px rgba(0, 30, 255, 0.5), -2.7928974010788217px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      10% {
+        text-shadow: 0.02956275843481219px 0 1px rgba(0, 30, 255, 0.5), -0.02956275843481219px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      15% {
+        text-shadow: 0.40218538552878136px 0 1px rgba(0, 30, 255, 0.5), -0.40218538552878136px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      20% {
+        text-shadow: 3.4794037899852017px 0 1px rgba(0, 30, 255, 0.5), -3.4794037899852017px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      25% {
+        text-shadow: 1.6125630401149584px 0 1px rgba(0, 30, 255, 0.5), -1.6125630401149584px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      30% {
+        text-shadow: 0.7015590085143956px 0 1px rgba(0, 30, 255, 0.5), -0.7015590085143956px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      35% {
+        text-shadow: 3.896914047650351px 0 1px rgba(0, 30, 255, 0.5), -3.896914047650351px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      40% {
+        text-shadow: 3.870905614848819px 0 1px rgba(0, 30, 255, 0.5), -3.870905614848819px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      45% {
+        text-shadow: 2.231056963361899px 0 1px rgba(0, 30, 255, 0.5), -2.231056963361899px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
       }
 
       50% {
-        opacity: 1;
+        text-shadow: 0.08084290417898504px 0 1px rgba(0, 30, 255, 0.5), -0.08084290417898504px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      55% {
+        text-shadow: 2.3758461067427543px 0 1px rgba(0, 30, 255, 0.5), -2.3758461067427543px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      60% {
+        text-shadow: 2.202193051050636px 0 1px rgba(0, 30, 255, 0.5), -2.202193051050636px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      65% {
+        text-shadow: 2.8638780614874975px 0 1px rgba(0, 30, 255, 0.5), -2.8638780614874975px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      70% {
+        text-shadow: 0.48874025155497314px 0 1px rgba(0, 30, 255, 0.5), -0.48874025155497314px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      75% {
+        text-shadow: 1.8948491305757957px 0 1px rgba(0, 30, 255, 0.5), -1.8948491305757957px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      80% {
+        text-shadow: 0.0833037308038857px 0 1px rgba(0, 30, 255, 0.5), -0.0833037308038857px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      85% {
+        text-shadow: 0.09769827255241735px 0 1px rgba(0, 30, 255, 0.5), -0.09769827255241735px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      90% {
+        text-shadow: 3.443339761481782px 0 1px rgba(0, 30, 255, 0.5), -3.443339761481782px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+      }
+
+      95% {
+        text-shadow: 2.1841838852799786px 0 1px rgba(0, 30, 255, 0.5), -2.1841838852799786px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
       }
 
       100% {
-        opacity: 0.98;
+        text-shadow: 2.6208764473832513px 0 1px rgba(0, 30, 255, 0.5), -2.6208764473832513px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
       }
-    }
-
-    .crt-flicker-anim {
-      animation: crt-flicker 0.15s infinite;
     }
 
     .tv-static {
@@ -141,18 +219,6 @@
 <body>
   <div id="root"></div>
 
-  <!-- CRT Curvature SVG Filter Definition -->
-  <svg width="0" height="0" style="position: absolute; pointer-events: none;">
-    <defs>
-      <filter id="crt" filterUnits="objectBoundingBox" x="-0.1" y="-0.1" width="1.2" height="1.2">
-        <!-- This base64 is a sphere displacement map (R for X, G for Y) based on the image provided -->
-        <feImage id="sphereMap"
-          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFm0lEQVR4nO2dW28TVxSFvzMzdjz22E7sOHEu9EshVCGUEAn1A0X1D/S7+hV95An1ExV6S/0B8QYhIQGhpUAuTWIn9thjO/Y4HmetXkhlDCEhieM48vT7SnNH0pE957v2XmuvPc9uYBgGxhhjYIz9t68pX2KM3R4D7D9W2K0xwG6NAXZrDLBbY4DdGgPs1hhgt8YAx6G7u+v7mX99/0P6y8oU6Ovr68u0tbX98f+Bvr6+Pl9dXFz8Vl9pDPAb2e/o6YwBDmMuLS09Y7FYS6Y1DIP9e8p/C0f1lcYA/xX7m5ubT8x8HMc509XV9Y7p9+7u7n6l7fV6R9OfMcbOzo7jOM5Tpqenp8eXn0zZ7+/v96U/p9M6Y4D/j8PDw6+1j46OvtI2Ozv7Rtvr9Y6mP5mP86f/Z58X5vX8T6bM990Y4H9mNpv9j6p9Xm9G/eTk5Gvto6Ojr7W9Xu9o+jNlvt9pDHAceXl5+bn2ycnJ19onJyfP6W/vVzM+Pv6S/p99XrjH9/f3+9KfT+uMAd6RtbW1H0yz1WpdMC0DkMlkfqr9wsLCP9pnMpnfTf/BvN7/yZT5ftsY4B1ZX19/Tf/BvN7/yZT5ftsY4B1ZX19/Tf/BvN7/yZT5fjuu0hjAAsAYYAxgAWAMYAFgDGABYAzwH2MvS/+XjAFYABgDWAFYAVgBWAFYAVgBfof9Tof0v2QMwArACsAKwArACsAKwArACvA77Hc6pP8lYwBWAFYAVgBWAFYAVgBWAFaA32G/0yH9LxkDsAKwArACsAKwArACsAKwAvwO+50O6X/JGIAVgBWAFYAVgBWAFYAVgBXgd9jvdEj/S8YArACsAKwArACsAKwArACsAL/DfqdD+l8yBmAFYAVgBWAFYAVgBWAFYAVoDfYb/TIf0vGQOwArACsAKwArACsAKwArACsAL/DfqdD+l8yBmAFYAVgBWAFYAVgBWAFYAX4HfY7HdL/kjEAKwArACsAKwArACsAKwArwO+w3+mQ/peMAVgBWAFYAVgBWAFYAVgBWAF+h/1Oh/S/ZAzACsAKwArACsAKwArACsAK8Dvsdzqk/yVjAFYAVgBWAFYAVgBWAFYAVoDfYb/TIf0vGQOwArACsAKwArACsAKwArAC/A77nQ7pf8kYgBWAFYAVgBWAFYAVgBWAFaA32G/0yH9LxkDsAKwArACsAKwArACsAKwAvwO+50O6X/JGIAVgBWAFYAVgBWAFYAVgBXgd9jvdEj/S8YArACsAKwArACsAKwArACsAL/DfqdD+l8yBmAFYAVgBWAFYAVgBWAFYAX4HfY7HdL/kjEAKwArACsAKwArACsAKwArwO+w3+mQ/peMAVgBWAFYAVgBWAFYAVgBWAF+h/1Oh/S/ZAzACsAKwArACsAKwArACsAK8Dvsdzqk/yVjAFYAVgBWAFYAVgBWAFYAVoDfYb/TIf0vGQOwArACsAKwArACsAKwArAC/A77nQ7pf8kYgBWAFYAVgBWAFYAVgBWAFaA32G/0yH9LxkDsAKwArACsAKwArACsAKwAvwO+50O6X/JGIAVgBWAFYAVgBWAFYAVgBXgd9jvdEj/S8YArACsAKwArACsAKwArACsAL/DfqdD+l8yBmAFYAVgBWAFYAVgBWAFYAX4HfY7HdL/kjEAKwArACsAKwArACsAKwArwO+w3+mQ/peMAVgBWAFYAVgBWAFYAVgBWAF+h/1Oh/S/ZAzACsAKwArACsAKwArACsAK8Dvsdzqk/yVjAFYAVgBWAFYAVgBWAFYAVoD/L/bYj8f+m/8N7H8mY8D/7G9j9f0v86eKscYYA2PsP1S+v7Ozv5/8H+Pvf97V/7q7G8cAY4wxBj79HzeWf96V39O9AAAAAElFTkSuQmCC" />
-        <feDisplacementMap id="dispMap" in="SourceGraphic" in2="map" scale="60" xChannelSelector="R"
-          yChannelSelector="G" result="distorted" />
-      </filter>
-    </defs>
-  </svg>
   <script type="module" src="/index.tsx"></script>
 </body>
 

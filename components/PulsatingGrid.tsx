@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 
 function getGridSize() {
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-        return 24; // smaller grid on mobile
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth < 480) return 16; // extra small devices
+        if (window.innerWidth < 768) return 24; // tablets
+        if (window.innerWidth < 1024) return 32; // large tablets
     }
-    return 40;
+    return 40; // desktop
 }
 const PULSE_DURATION = 1200; // ms
 const PULSE_COUNT = 12; // how many squares pulse at once

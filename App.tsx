@@ -275,6 +275,7 @@ const App: React.FC = () => {
         audioRef.current = new window.Audio('/audioo/bg.mp3');
         audioRef.current.loop = true;
         audioRef.current.volume = 0.13; // Lower volume for background
+        audioRef.current.muted = true; // Mute by default
       }
       audioRef.current.play().catch(() => { });
       setMusicStarted(true);
@@ -309,19 +310,34 @@ const App: React.FC = () => {
     <>
       <Cursor />
       <div id="crt-warp-container">
-        <div className="hidden lg:block">
+        <div className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
           <CRTOverlay />
+          <img
+            src="/bezel.svg"
+            className="absolute inset-0 w-full h-full z-[10002]"
+            style={{ objectFit: 'fill' }}
+            alt=""
+          />
         </div>
         <div className={`fixed inset-0 bg-black z-[10001] pointer-events-none transition-opacity duration-500 ${blackout ? 'opacity-100' : 'opacity-0'}`} />
         <div className="relative w-full h-full text-gray-800 flex flex-col overflow-hidden">
           {view === 'GRID' && !isTransitioning && <TopBar />}
           {bootPhase !== 'COMPLETE' && (
-            <div onMouseDown={handleDisclaimerClick} className={`absolute inset-0 z-[200] bg-black text-white flex flex-col items-center justify-center p-8 text-center cursor-pointer transition-opacity duration-[1500ms] ease-in-out ${bootPhase === 'FADING_OVERLAY' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-              <div className={`max-w-2xl space-y-8 transition-opacity duration-1000 ease-in-out ${(bootPhase === 'NOTICE') ? 'opacity-100' : 'opacity-0'}`}>
-                <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white italic uppercase tracking-widest">Notice</h1>
+            <div onMouseDown={handleDisclaimerClick} className={`absolute inset-0 z-[200] bg-black text-white flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center cursor-pointer transition-opacity duration-[1500ms] ease-in-out ${bootPhase === 'FADING_OVERLAY' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+              <div className={`max-w-2xl w-full space-y-6 transition-opacity duration-1000 ease-in-out ${(bootPhase === 'NOTICE') ? 'opacity-100' : 'opacity-0'}`}>
+                <div className="flex flex-row items-center justify-center gap-4">
+                  <svg className="w-16 h-16 flex-shrink-0" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Outer black border */}
+                    <path d="M100 10 L190 180 L10 180 Z" fill="#FFC107" stroke="#000" strokeWidth="12" strokeLinejoin="round" />
+                    {/* Exclamation mark */}
+                    <rect x="88" y="50" width="24" height="80" rx="12" fill="#000" />
+                    <circle cx="100" cy="155" r="12" fill="#000" />
+                  </svg>
+                  <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white italic uppercase tracking-widest">LISTEN</h1>
+                </div>
                 <div className="h-1 w-24 bg-white mx-auto rounded-full"></div>
-                <p className="text-lg md:text-2xl font-light leading-relaxed text-gray-300">The content showcased in this portfolio is a showcase of MY creative development work.<br /><br />I love my friends for motivating me to get this far.</p>
-                <div className="pt-12"><p className="text-sm text-gray-500 uppercase tracking-widest animate-pulse">Press any button to continue</p></div>
+                <p className="text-lg md:text-2xl font-light leading-relaxed text-gray-300">The content showcased in this portfolio is a showcase of MY creative development work over the past 3 years.<br></br> <br></br>This website is a work in development.</p>
+                <div className="pt-12"><p className="text-base md:text-base text-gray-500 uppercase tracking-widest animate-pulse">Press any button to continue</p></div>
               </div>
             </div>
           )}
@@ -330,8 +346,8 @@ const App: React.FC = () => {
             <div className={`relative w-full h-full transition-opacity duration-300 ${view === 'GRID' && !isTransitioning ? 'opacity-100' : 'opacity-0'}`}>
               {/* Animated Pulsating Grid */}
               {view === 'GRID' && !isTransitioning && <PulsatingGrid />}
-              <div className="relative z-20 w-full h-full flex flex-col items-center pt-32 md:pt-[20vh] pb-32 overflow-y-auto no-scrollbar">
-                <div className="flex flex-wrap justify-center gap-4 md:gap-[4vh] w-full max-w-7xl px-4">
+              <div className="relative z-20 w-full h-full flex flex-col items-center pt-12 sm:pt-16 md:pt-24 lg:pt-32 pb-24 sm:pb-28 md:pb-32 overflow-y-auto no-scrollbar">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-[4vh] w-full max-w-7xl px-2 sm:px-3 md:px-4">
                   {CHANNELS.map((channel, index) => (
                     <div key={channel.id} id={`channel-card-${channel.id}`} className="w-[45%] md:w-[30%] lg:w-[25%] max-w-[320px] animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
                       <GridChannel channel={channel} onClick={handleChannelClick} index={index} />
